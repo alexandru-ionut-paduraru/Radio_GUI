@@ -1,0 +1,147 @@
+.header{
+    border: 1px solid lightblue;
+    color: rgb(1, 108, 170);
+    margin-bottom: 5px;
+}
+
+.header h1{
+    margin-left: 5px;
+}
+
+.menu{
+    border: 1px solid lightblue;
+    background-color: rgb(223, 247, 255);
+    margin-bottom: 5px;
+}
+
+.content{
+    border: 1px solid lightblue;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 5px;
+}
+
+.footer{
+    border: 1px solid lightblue;
+    color: rgb(16, 133, 165);
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+.menu-button{
+    border: 1px solid lightblue;
+    background-color: rgba(255, 255, 255, 1);
+    margin: 5px 5px 10px 5px;
+    padding:10px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px gray;
+    font-weight: bold;
+}
+
+.menu-button:hover{
+    border: 1px solid lightblue;
+    background-color:rgb(246, 252, 255);
+    margin: 5px 5px 10px 5px;
+    padding: 10px;
+    box-shadow: 3px 3px 10px gray;
+}
+
+.menu-button:active{
+    border: 1px solid lightblue;
+    background-color: rgb(246, 252, 255);
+    padding:10px;
+    box-shadow: 1px 1px 3px gray;
+}
+
+.cmd-button{
+    background-color: rgba(255, 255, 255,1);
+    margin: 5px 5px 10px 5px;
+    padding:10px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px gray;
+    font-weight: bold;
+}
+
+.cmd-button:hover{
+    background-color: rgb(255, 251, 216);
+    padding:10px;
+    box-shadow: 3px 3px 10px gray;
+}
+
+.cmd-button:active{
+    background-color: rgb(255, 251, 216);
+    padding:10px;
+    box-shadow: 1px 1px 3px gray;
+}
+
+#radio-stations{
+    max-height: 300px;
+    padding: 5px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#radio-stations table{
+    border: 1px lightblue solid;
+    margin: 5px;
+    list-style: none;
+    
+    padding-left: 0px;
+    width: 100%;
+}
+#radio-stations th{
+    border: 1px lightblue solid;  
+    background-color: rgb(235, 241, 243);
+    margin: 5px;
+    padding-left: 0px;
+}
+#radio-stations td{
+    border: 1px lightblue solid; 
+    margin: 5px;
+    margin:0px;
+    padding-left: 3px;
+}
+#radio-stations tr{
+    border: 1px lightblue solid; 
+    margin: 5px;
+    margin:0px;
+}
+
+.options-button{
+    border: 1px solid lightblue;
+    background-color: rgba(255, 255, 255, 1);
+    color: rgb(1, 108, 170);
+    margin: 5px 5px 10px 5px;
+    padding:5px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 1px 1px 3px rgb(45, 78, 80);
+}
+
+.options-button:hover{
+    border: 1px solid lightblue;
+    background-color:rgb(246, 252, 255);
+    margin: 5px 5px 10px 5px;
+    padding: 5px;
+    box-shadow: 1px 1px 3px rgb(45, 78, 80);
+}
+
+.options-button:active{
+    border: 1px solid lightblue;
+    background-color: rgb(246, 252, 255);
+    padding:5px;
+    box-shadow: 0px 0px 3px rgb(45, 78, 80);
+}
+
+.right{
+    text-align: right;
+}
+
+.red-button{
+    border: 1px solid rgb(255, 0, 0);
+    color: red;
+}
+
+.green-button{
+    border: 1px solid rgb(0, 255, 0);
+    color: green;
+}

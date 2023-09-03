@@ -10,9 +10,88 @@
         
     </head>
     <body>
-        <h1>Hello from eel</h1>
+        <div class="main-div">
+            <div class="header">
+                <h1>FM Radio Interface</h1>
+            </div>
+            <div class="content">
+                <div>
+                    <h3 style="margin:5px; display: inline;">Playing Station</h3>
+                    
+                    <span style="margin-left:5px; 
+                            font-weight: bold;
+                            color: rgb(172, 150, 124);" id="">
+                        No channel playing
+                </span>
+                </div>
+            </div>
+            <div class="menu">
+                <button class="menu-button">Radio List</button>
+                <button class="menu-button">Connection</button>
+                <button class="cmd-button green-button">Radio ON</button>
+                <button class="cmd-button red-button">Radio OFF</button>
+                
+            </div>
+            
+            <div class="content">
+                <div>
+                    <h3 style="margin-left:5px; margin-top: 5px;">Serial Connection</h3>
+                    <label style="margin-left: 5px;">Available Ports</label>
+                    <button class="options-button">Refresh</button>
+                    <button class="options-button">Connect</button>
+                    <button class="options-button">Disconnect</button>
+                </div>
+            </div>
+            <div class="content" id="radio-stations">
+                <h3 style="margin-left:5px; margin-top: 5px;">Rario Stations List</h3>
+                <table>
+                    <tr>
+                        <th>No.</th>
+                        <th>Station Name</th>
+                        <th>Frequency</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Rock FM</td>
+                        <td>100.6</td>
+                        <td class="right">
+                            <button class="options-button">Edit</button>
+                            <button class="options-button red-button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Europa FM</td>
+                        <td>100.6</td>
+                        <td class="right">
+                            <button class="options-button">Edit</button>
+                            <button class="options-button red-button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Radio Romania</td>
+                        <td>100.6</td>
+                        <td class="right">
+                            <button class="options-button">Edit</button>
+                            <button class="options-button red-button">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+                
+                
+                <button class="options-button">Sort by name</button>
+                <button class="options-button">Sort by frequency</button>
+                <button class="options-button">+ Add new station</button>
+                <button class="options-button">Band Scan</button>
+            </div>
+        </div>
+        <div class="footer">
+            Radio GUI application - 2023
+        </div>
         <!-- <script type="text/javascript">
-            alert("Message");
+  vscode-file://vscode-app/c:/Program%20Files/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html          alert("Message");
         </script> -->
     </body>
     <script type="text/javascript" src="MainScript.js"></script>
