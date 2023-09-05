@@ -1,11 +1,223 @@
+var GlobalStations={}
+var newStationForm=false;
+var sortByName_Reverse=false;
+var sortByFreq_Reverse=false;
 
-eel.expose(js_random);
-function js_random(){
-    return Math.random();
+function toggleStationList(){
+    document.getElementById('radio-stations').toggleAttribute('hidden');
+    if (document.getElementById('radio-stations').hasAttribute('hidden')){
+        document.getElementById('RadioList_menu_btn').setAttribute('class', "menu-button");
+    }else{
+        document.getElementById('RadioList_menu_btn').setAttribute('class', "menu-button-active");
+    }
 }
 
-eel.expose(Alert);
-function Alert(message){
+function toggleConnectionSetup(){
+    document.getElementById('connection-menu').toggleAttribute('hidden');
+    if (document.getElementById('connection-menu').hasAttribute('hidden')){
+        document.getElementById('Connection_menu_btn').setAttribute('class', "menu-button");
+    }else{
+        document.getElementById('Connection_menu_btn').setAttribute('class', "menu-button-active");
+    }
+}
+
+document.getElementById('com_refresh').addEventListener("click", ()=>{
+    eel.py_comListUpdate();
+}, false);
+document.getElementById("com_connect").addEventListener("click", ()=>{
+    var selectedCOM=document.getElementById('com_ports').value;
+    eel.py_com_connect(selectedCOM);
+},false);
+document.getElementById('com_disconnect').addEventListener("click",()=>{eel.py_com_disconnect()},false)
+
+eel.expose(set_com_list)
+function set_com_list(Ports, ComConnected){
+    var index=0;
+    var InnerHTML=""
+    for (index=0; index<Ports.length; index++){
+        InnerHTML+="<option value='"+Ports[index]+"'>"+Ports[index]+"</option>\n\r";
+    }
+
+    document.getElementById('com_connect').disabled=false;
+    if (InnerHTML==""){
+        InnerHTML="<option value='-select-'>-No COM-</option>";
+        //disable Connect Button
+        document.getElementById('com_connect').disabled=true;
+    }
+    document.getElementById("com_ports").innerHTML=InnerHTML;
+    if (ComConnected){
+        document.getElementById('com_connect').disabled=true;
+    }
+}
+
+eel.expose(update_connection_status);
+function update_connection_status(ComConnected, InfoText){
+    if (ComConnected){
+        document.getElementById('com_connect').disabled=true;
+        document.getElementById('com_disconnect').disabled=false;
+        document.getElementById('com_ports').disabled=true;
+        document.getElementById('com_connected').innerHTML="<strong>CONNECTED ("+InfoText+")</strong>";
+        document.getElementById('com_connected').style="color:green";
+    }else{
+        document.getElementById('com_connect').disabled=false;
+        document.getElementById('com_disconnect').disabled=true;
+        document.getElementById('com_ports').disabled=false;
+        document.getElementById('com_connected').innerHTML="<strong>Disconnected</strong>";
+        document.getElementById('com_connected').style="color:darkred";
+    }
+}
+
+eel.expose(printAlert);
+function printAlert(message){
     alert(message);
 }
 
+eel.expose(stationsUpdate);
+function stationsUpdate(Stations){
+    GlobalStations=Stations;
+    var StationsList=Stations["Stations"];
+    var listLength=StationsList.length;
+    var table=document.getElementById("StationsTable");
+    table.innerHTML=""; //erase current content of the table
+    table.innerHTML+="<tr>\
+                    <th>No.</th>\
+                    <th>Station Name</th>\
+                    <th>Frequency</th>\
+                    <th>Actions</th>\
+                </tr>";
+    if (listLength>0){
+        for (var i=0; i<listLength; i++){
+            table.innerHTML+="<tr>\
+                    <td>"+(i+1)+"</td>\
+                    <td id='td_stationName_"+i+"'>"+StationsList[i]["Name"]+"</td>\
+                    <td id='td_stationFreq_"+i+"'>"+StationsList[i]["Frequency"]+"</td>\
+                    <td class='right'>\
+                        <button id='stat_play_btn_"+i+"' class='options-button green-button' onclick=stationPlay("+i+")>Play</button>\
+                        <button id='stat_edit_btn_"+i+"'  class='options-button' onclick=stationEdit("+i+")>Edit</button>\
+                        <button id='stat_delete_btn_"+i+"'  class='options-button red-button' onclick=stationDelete("+i+")>Delete</button>\
+                        <button id='stat_save_btn_"+i+"'  class='options-button green-button' onclick=stationEditSave("+i+") hidden>Save</button>\
+                        <button id='stat_cancel_btn_"+i+"'  class='options-button red-button' onclick=stationEditCancel("+i+") hidden>Cancel</button>\
+                    </td>\
+                </tr>";
+        }
+    }else{
+        //no item to list
+        table.innerHTML+="<tr>\
+                    <td colspan=4><strong>No item in list</strong></td>\
+                </tr>";
+    }
+}
+
+function addStation(){
+    var table=document.getElementById("NewStationForm");
+    if (newStationForm){
+        newStationForm=false;
+        table.innerHTML="";
+        document.getElementById("newStationBtn").setAttribute("class", "options-button");
+    }else{
+        newStationForm=true;
+        table.innerHTML="<br/><table>\
+                        <tr><td colspan=4 style='background-color:rgb(246, 252, 255)'>New Station Form</td></tr>\
+                        <tr>\
+                        <th>No.</th>\
+                        <th>Station Name</th>\
+                        <th>Frequency</th>\
+                        <th>Actions</th>\
+                    </tr>\
+                    <tr>\
+                        <td>"+1+"</td>\
+                        <td><input name='stationName' id='stationName' type='text' style='width:150px; margin-left:0px'></td>\
+                        <td><input name='stationFreq' id='stationFreq' type='text' style='width:90px; margin-left:0px'></td>\
+                        <td class='right'>\
+                            <button class='options-button green-button' onclick=stationSave()>Save</button>\
+                            <button class='options-button red-button' onclick=stationCancel()>Cancel</button>\
+                        </td>\
+                    </tr></table>";
+        document.getElementById("newStationBtn").setAttribute("class", "options-button-active");
+    }
+    
+}
+
+function stationCancel(){
+    var table=document.getElementById("NewStationForm");
+    if (newStationForm){
+        newStationForm=false;
+        table.innerHTML="";
+        document.getElementById("newStationBtn").setAttribute("class", "options-button");
+    }
+}
+
+function stationSave(){
+    var table=document.getElementById("NewStationForm");
+    if (newStationForm){
+        var stationName=document.getElementById("stationName").value;
+        var stationFreq=document.getElementById("stationFreq").value;
+        eel.py_addStation(stationName, stationFreq);
+        newStationForm=false;
+        table.innerHTML="";
+        document.getElementById("newStationBtn").setAttribute("class", "options-button");
+    }
+}
+
+function stationDelete(stationNumber){
+    eel.py_deleteStation(stationNumber);
+}
+
+function stationEdit(index){
+    var nameCell = document.getElementById("td_stationName_"+index);
+    var freqCell = document.getElementById("td_stationFreq_"+index);
+    nameCell.innerHTML="<input type='text' id='editStationName_"+index+"'  style='width:150px; margin-left:0px'>"
+    freqCell.innerHTML="<input type='text' id='editStationFreq_"+index+"'  style='width:90px; margin-left:0px'>"
+    document.getElementById('editStationName_'+index).value=GlobalStations["Stations"][index]["Name"];
+    document.getElementById('editStationFreq_'+index).value=GlobalStations["Stations"][index]["Frequency"];
+    //hide regular buttons
+    document.getElementById('stat_play_btn_'+index).setAttribute('hidden', true);
+    document.getElementById('stat_edit_btn_'+index).setAttribute('hidden', true);
+    document.getElementById('stat_delete_btn_'+index).setAttribute('hidden', true);
+    //show edit related buttons
+    document.getElementById('stat_save_btn_'+index).removeAttribute('hidden');
+    document.getElementById('stat_cancel_btn_'+index).removeAttribute('hidden');
+}
+
+function stationEditCancel(index){
+    var nameCell = document.getElementById("td_stationName_"+index);
+    var freqCell = document.getElementById("td_stationFreq_"+index);
+    nameCell.innerHTML=GlobalStations["Stations"][index]["Name"];
+    freqCell.innerHTML=GlobalStations["Stations"][index]["Frequency"];
+   //show regular buttons
+    document.getElementById('stat_play_btn_'+index).removeAttribute('hidden');
+    document.getElementById('stat_edit_btn_'+index).removeAttribute('hidden');
+    document.getElementById('stat_delete_btn_'+index).removeAttribute('hidden');
+    //hide edit related buttons
+    document.getElementById('stat_save_btn_'+index).setAttribute('hidden', true);
+    document.getElementById('stat_cancel_btn_'+index).setAttribute('hidden', true);
+}
+
+function stationEditSave(index){
+    var stationName=document.getElementById("editStationName_"+index).value;
+    var stationFreq=document.getElementById("editStationFreq_"+index).value;
+    eel.py_updateStation_atIndex(index, stationName, stationFreq);
+}
+
+function stationSortByName(){
+    if (sortByName_Reverse==false){
+        eel.py_stationListSort("byName", "asc");
+    }else{
+        eel.py_stationListSort("byName", "desc");
+    }
+    sortByName_Reverse=~sortByName_Reverse;
+}
+
+function stationSortByFreq(){
+    if (sortByFreq_Reverse==false){
+        eel.py_stationListSort("byFreq", "asc");
+    }else{
+        eel.py_stationListSort("byFreq", "desc");
+    }
+    sortByFreq_Reverse=~sortByFreq_Reverse;
+}
+
+window.addEventListener("load", ()=>{
+    eel.py_init();
+    eel.getRadioStations();
+},false);

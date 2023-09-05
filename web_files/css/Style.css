@@ -52,6 +52,30 @@
     box-shadow: 1px 1px 3px gray;
 }
 
+.menu-button-active{
+    border: 1px solid lightblue;
+    background-color: rgb(253, 255, 144);
+    margin: 5px 5px 10px 5px;
+    padding:10px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px gray;
+    font-weight: bold;
+}
+
+.menu-button-active:hover{
+    border: 1px solid lightblue;
+    background-color: rgb(255, 229, 81);
+    padding:10px;
+    box-shadow: 3px 3px 10px gray;
+}
+
+.menu-button-active:active{
+    border: 1px solid lightblue;
+    background-color: rgb(253, 255, 144);
+    padding:10px;
+    box-shadow: 1px 1px 3px gray;
+}
+
 .cmd-button{
     background-color: rgba(255, 255, 255,1);
     margin: 5px 5px 10px 5px;
@@ -73,8 +97,9 @@
     box-shadow: 1px 1px 3px gray;
 }
 
+
 #radio-stations{
-    max-height: 300px;
+    max-height: 600px;
     padding: 5px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -132,6 +157,28 @@
     box-shadow: 0px 0px 3px rgb(45, 78, 80);
 }
 
+.options-button:disabled{
+    border: 1px solid rgb(128, 128, 128);
+    color: rgb(128, 128, 128);;
+    background-color: rgba(255, 255, 255,1);
+    margin: 5px 5px 10px 5px;
+    padding:5px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 1px 1px 3px rgb(83, 99, 100);
+}
+
+.options-button-active{
+    border: 1px solid lightblue;
+    background-color: rgb(253, 255, 144);
+    color: rgb(1, 108, 170);
+    margin: 5px 5px 10px 5px;
+    padding:5px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 1px 1px 3px rgb(45, 78, 80);
+}
+
 .right{
     text-align: right;
 }
@@ -144,4 +191,22 @@
 .green-button{
     border: 1px solid rgb(0, 255, 0);
     color: green;
+}
+
+.content select{
+    border: 1px lightblue solid;
+    padding: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: rgb(1, 108, 170);
+}
+
+.content input{
+    border: 1px lightblue solid;
+    padding: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: rgb(1, 108, 170);
 }

@@ -16,6 +16,11 @@
             </div>
             <div class="content">
                 <div>
+                    <h3 style="margin:5px; display: inline;"><strong id="com_connected">Disconnected</strong></h3>
+                </div>
+            </div>
+            <div class="content">
+                <div>
                     <h3 style="margin:5px; display: inline;">Playing Station</h3>
                     
                     <span style="margin-left:5px; 
@@ -26,32 +31,36 @@
                 </div>
             </div>
             <div class="menu">
-                <button class="menu-button">Radio List</button>
-                <button class="menu-button">Connection</button>
+                <button class="menu-button" onclick=toggleStationList() id="RadioList_menu_btn">Radio List</button>
+                <button class="menu-button" onclick=toggleConnectionSetup() id="Connection_menu_btn">Connection</button>
                 <button class="cmd-button green-button">Radio ON</button>
                 <button class="cmd-button red-button">Radio OFF</button>
                 
             </div>
             
-            <div class="content">
+            <div class="content"  id="connection-menu" hidden>
                 <div>
-                    <h3 style="margin-left:5px; margin-top: 5px;">Serial Connection</h3>
-                    <label style="margin-left: 5px;">Available Ports</label>
-                    <button class="options-button">Refresh</button>
-                    <button class="options-button">Connect</button>
-                    <button class="options-button">Disconnect</button>
+                    <h3 style="margin-left:5px; margin-top: 5px;">Serial Connection </h3> 
+                    <label  for="com_ports" style="margin-left: 5px;"><strong>Available Ports</strong> </label>
+                    <select name="com_ports" id="com_ports">
+                        <option value="-select-">-Select-</option>
+                    </select>
+                    <button class="options-button"  id="com_refresh">Refresh</button>
+                    <button class="options-button"  id="com_connect">Connect</button>
+                    <button class="options-button"  id="com_disconnect">Disconnect</button>
+                    
                 </div>
             </div>
-            <div class="content" id="radio-stations">
+            <div class="content" id="radio-stations" hidden>
                 <h3 style="margin-left:5px; margin-top: 5px;">Rario Stations List</h3>
-                <table>
+                <table id="StationsTable">
                     <tr>
                         <th>No.</th>
                         <th>Station Name</th>
                         <th>Frequency</th>
                         <th>Actions</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>1</td>
                         <td>Rock FM</td>
                         <td>100.6</td>
@@ -59,32 +68,14 @@
                             <button class="options-button">Edit</button>
                             <button class="options-button red-button">Delete</button>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Europa FM</td>
-                        <td>100.6</td>
-                        <td class="right">
-                            <button class="options-button">Edit</button>
-                            <button class="options-button red-button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Radio Romania</td>
-                        <td>100.6</td>
-                        <td class="right">
-                            <button class="options-button">Edit</button>
-                            <button class="options-button red-button">Delete</button>
-                        </td>
-                    </tr>
+                    </tr> -->
                 </table>
+                <span id="NewStationForm"></span>
                 
-                
-                <button class="options-button">Sort by name</button>
-                <button class="options-button">Sort by frequency</button>
-                <button class="options-button">+ Add new station</button>
-                <button class="options-button">Band Scan</button>
+                <button class="options-button" onclick=stationSortByName()>Sort by name</button>
+                <button class="options-button" onclick=stationSortByFreq()>Sort by frequency</button>
+                <button class="options-button" onclick=addStation() id='newStationBtn'> + Add new station</button>
+                <button class="options-button" onclick=eel.getRadioStations()>Band Scan</button>
             </div>
         </div>
         <div class="footer">
