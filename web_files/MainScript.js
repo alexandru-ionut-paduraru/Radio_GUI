@@ -21,6 +21,14 @@ function toggleConnectionSetup(){
     }
 }
 
+function radioOn(){
+    eel.py_radioOn();
+}
+
+function radioOff(){
+    eel.py_radioOff();
+}
+
 document.getElementById('com_refresh').addEventListener("click", ()=>{
     eel.py_comListUpdate();
 }, false);
@@ -56,12 +64,14 @@ function update_connection_status(ComConnected, InfoText){
         document.getElementById('com_connect').disabled=true;
         document.getElementById('com_disconnect').disabled=false;
         document.getElementById('com_ports').disabled=true;
+        document.getElementById('com_refresh').disabled=true;
         document.getElementById('com_connected').innerHTML="<strong>CONNECTED ("+InfoText+")</strong>";
         document.getElementById('com_connected').style="color:green";
     }else{
         document.getElementById('com_connect').disabled=false;
         document.getElementById('com_disconnect').disabled=true;
         document.getElementById('com_ports').disabled=false;
+        document.getElementById('com_refresh').disabled=false;
         document.getElementById('com_connected').innerHTML="<strong>Disconnected</strong>";
         document.getElementById('com_connected').style="color:darkred";
     }
@@ -179,6 +189,10 @@ function stationEdit(index){
     document.getElementById('stat_cancel_btn_'+index).removeAttribute('hidden');
 }
 
+function stationPlay(index){
+    eel.py_stationPlay(index);
+}
+
 function stationEditCancel(index){
     var nameCell = document.getElementById("td_stationName_"+index);
     var freqCell = document.getElementById("td_stationFreq_"+index);
@@ -217,7 +231,56 @@ function stationSortByFreq(){
     sortByFreq_Reverse=~sortByFreq_Reverse;
 }
 
+document.getElementById("serch-mode").addEventListener("click", ()=>{
+    eel.py_toggleSerchMode();
+}, false);
+
+document.getElementById("plus-button").addEventListener("click", ()=>{
+    eel.py_getNextStation();
+}, false);
+
+document.getElementById("minus-button").addEventListener("click", ()=>{
+    eel.py_getPrevStation();
+}, false);
+
+
 window.addEventListener("load", ()=>{
     eel.py_init();
     eel.getRadioStations();
 },false);
+
+
+eel.expose(updateRadioStatus)
+function updateRadioStatus(statusRegs){
+    // if (statusRegs[0]&0x80){
+    //     document.getElementById("Stat_0").value="1";
+    // }else{
+    //     document.getElementById("Stat_0").value="0"; 
+    // }
+
+    // if (statusRegs[0]&0x40){
+    //     document.getElementById("Stat_1").value="1";
+    // }else{
+    //     document.getElementById("Stat_1").value="0"; 
+    // }
+    // document.getElementById("Stat_2").value=(32768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/ 4_000_000 - 0.225).toFixed(1);
+    // document.getElementById("Stat_4").value=(statusRegs[2]&0x7F);
+
+    document.getElementById("freq-indicator").value=(32768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/ 4_000_000 - 0.225).toFixed(1);
+
+}
+
+document.getElementById('serch-save-new').addEventListener("click", ()=>{
+    document.getElementById('radio-stations').removeAttribute('hidden');
+    document.getElementById('RadioList_menu_btn').setAttribute('class', "menu-button-active");
+    newStationForm=false; //the form is not already displayed
+    addStation();
+    //set default value for frequency
+    document.getElementById("stationFreq").value=document.getElementById("freq-indicator").value;
+}, false)
+
+function timeout_handler(){
+    // call python function that gets values from uC
+    eel.py_getRadioStatus();
+}
+setInterval(timeout_handler, 1000); //every 1000ms

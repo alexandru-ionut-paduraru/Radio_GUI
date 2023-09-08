@@ -10,6 +10,8 @@ RadioStations={
         }
     ],
 }
+
+InRegisterList=[0]*5
 #capture close command
 def Close_CB(page_path, sockets_list):
     print(page_path)
@@ -80,13 +82,100 @@ def py_stationListSort(criteria, direction):
         pass
     eel.stationsUpdate(RadioStations)
 
+@eel.expose
+def py_getRadioStatus():
+  
+  if (SerialCOM.ser.is_open):
+      #print(f'Getting Radio status bytes')
+      if SerialCOM.GetToken():
+        CMD_String="G\r"
+        if SerialCOM.sendString(CMD_String)==-1:return -1
+        [res, received_string]=SerialCOM.receiveString()
+        if (res==-1): return -1 
+        if received_string[0]=='X':
+          print("Data update sequence - Command Error")
+        else:
+            received_string=received_string[1:] #take out first character
+            #convert the content to a byte list
+            try:
+                data=[int(str_no) for str_no in received_string.split(",")]
+                
+                InRegisterList[0]=data[0]
+                InRegisterList[1]=data[1]
+                InRegisterList[2]=data[2]
+                InRegisterList[3]=data[3]
+                InRegisterList[4]=data[4]
+            except Exception as e:
+                print(e)
+                print("Get Inst Values - Error while converting received data")
+                eel.printAlert("Error while converting received data")
+        SerialCOM.ReleaseToken()
+  eel.updateRadioStatus(InRegisterList)
+
+@eel.expose
+def py_toggleSerchMode():
+    print(f'Sending Serch Mode Toggle - CMD-10')
+    SerialCOM.setCommandReg(10, 1)
+
+@eel.expose
+def py_getNextStation():
+    print(f'Sending Serch UP - CMD-11')
+    SerialCOM.setCommandReg(11, 1)
+
+
+@eel.expose
+def py_getPrevStation():
+    print(f'Sending Serch DOWN - CMD-12')
+    SerialCOM.setCommandReg(12, 1)
+
+
+@eel.expose
+def py_radioOn():
+  print(f'Sending Radio On - CMD-14')
+  SerialCOM.setCommandReg(14, 1)
+
+@eel.expose
+def py_radioOff():
+  print(f'Sending Radio Off - CMD-15')
+  SerialCOM.setCommandReg(15, 1) 
+
+@eel.expose
+def py_stationPlay(index):
+    print(f'Plaing Station {index} - {RadioStations["Stations"][index]["Name"]} - {RadioStations["Stations"][index]["Frequency"]}')
+    #write PLL parameter
+    PLL=int(4*(float(RadioStations["Stations"][index]["Frequency"])*1_000_000+225_000)/32768)
+    print(f'PLL should be {PLL}')
+
+    if (SerialCOM.ser.is_open):
+      if SerialCOM.GetToken():
+        CMD_String=f'w0,0,{(PLL>>8)&0x3F},{PLL&0xFF}\r'
+
+        if SerialCOM.sendString(CMD_String)==-1:return -1
+        [res, received_string]=SerialCOM.receiveString()
+        if (res==-1): return -1 
+        if received_string[0]=='X':
+          print("Data update sequence - Command Error")
+        else:
+            received_string=received_string[1:] #take out first character
+            #convert the content to a byte list
+            try:
+                pass
+            except Exception as e:
+                print(e)
+                print("Write data error")
+                eel.printAlert("Error while converting received data")
+        SerialCOM.setCommandReg(13, 1)
+        SerialCOM.ReleaseToken()
+    else:
+        eel.printAlert("Serial connection not opened")
+
 #print(eel.js_random()())
 
 eel.start('index.html', 
           # mode='edge', 
           host='localhost',
           port='5001',
-          size=(500,900),
+          size=(550,900),
           cmdline_args=[
               '--start-fullscreen', 
               #'--browser-startup-dialog'

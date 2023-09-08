@@ -33,8 +33,8 @@
             <div class="menu">
                 <button class="menu-button" onclick=toggleStationList() id="RadioList_menu_btn">Radio List</button>
                 <button class="menu-button" onclick=toggleConnectionSetup() id="Connection_menu_btn">Connection</button>
-                <button class="cmd-button green-button">Radio ON</button>
-                <button class="cmd-button red-button">Radio OFF</button>
+                <button class="cmd-button green-button" onclick=radioOn()>Radio ON</button>
+                <button class="cmd-button red-button" onclick=radioOff()>Radio OFF</button>
                 
             </div>
             
@@ -76,6 +76,45 @@
                 <button class="options-button" onclick=stationSortByFreq()>Sort by frequency</button>
                 <button class="options-button" onclick=addStation() id='newStationBtn'> + Add new station</button>
                 <button class="options-button" onclick=eel.getRadioStations()>Band Scan</button>
+            </div>
+
+            <div class="content"  id="Radio-Control">
+                <div>
+                    <h3 style="margin-left:5px; margin-top: 5px;">Controls </h3> 
+                   <!--  <label  for="com_ports" style="margin-left: 5px;"><strong>Available Ports</strong> </label>
+                    <select name="com_ports" id="com_ports">
+                        <option value="-select-">-Select-</option>
+                    </select> -->
+                    
+                    <button class="options-button" style="width: 245px;" id="serch-mode">Search Mode</button>
+                    <br>
+                    <button class="options-button" style="font-size: 20pt; width: 50px; height: 50px;" id="plus-button">+</button>
+                    <input type="text" inputmode="numeric" style="font-size: 20pt; width: 120px; height: 50px; text-align: center; padding: 0px;" value=100.6 id="freq-indicator">
+                    <button class="options-button" style="font-size: 20pt; width: 50px; height: 50px;" id="minus-button">-</button>
+                    <br>
+                    <button class="options-button" style="width: 245px;" id="serch-save-new">Save Station</button>
+                    
+                    <!-- <br>
+                    <hr>
+                    <label for="Stat_0">Ready Flag (RF)</label>
+                    <input type="text" disabled id="Stat_0">
+                    <br>
+                    <label for="Stat_1">Band Limit Flag (BLF)</label>
+                    <input type="text" disabled id="Stat_1">
+                    <br>
+                    <label for="Stat_2">PLL/Freq</label>
+                    <input type="text" disabled id="Stat_2">
+                    <br>
+                    <label for="Stat_3">STEREO</label>
+                    <input type="text" disabled id="Stat_3">
+                    <br>
+                    <label for="Stat_4">Counter Resut (IF)</label>
+                    <input type="text" disabled id="Stat_4">
+                    <br>
+                    <label for="Stat_5">Level ADC Output(LEV)</label>
+                    <input type="text" disabled id="Stat_5">
+                    <br> -->
+                </div>
             </div>
         </div>
         <div class="footer">
