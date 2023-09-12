@@ -93,7 +93,7 @@ def py_com_connect(PortNo):
             
             print("---Reset all command flags")
             for index in range(0, 16):
-                print(f"reset command flag {index}")
+                #print(f"reset command flag {index}")
                 if setCommandReg(index, 0) == -1:
                     print("Error resetting command flags")
                     eel.printAlert("Error resetting command flags")

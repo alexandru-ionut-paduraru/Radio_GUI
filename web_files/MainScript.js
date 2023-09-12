@@ -124,6 +124,8 @@ function addStation(){
         newStationForm=false;
         table.innerHTML="";
         document.getElementById("newStationBtn").setAttribute("class", "options-button");
+        var stationTable=document.getElementById("radio-stations");
+        stationTable.scrollTo(0,stationTable.scrollHeight);
     }else{
         newStationForm=true;
         table.innerHTML="<br/><table>\
@@ -137,15 +139,16 @@ function addStation(){
                     <tr>\
                         <td>"+1+"</td>\
                         <td><input name='stationName' id='stationName' type='text' style='width:150px; margin-left:0px'></td>\
-                        <td><input name='stationFreq' id='stationFreq' type='text' style='width:90px; margin-left:0px'></td>\
+                        <td><input name='stationFreq' id='stationFreq' type='text' style='width:90px; margin-left:0px' inputmode='numeric'></td>\
                         <td class='right'>\
                             <button class='options-button green-button' onclick=stationSave()>Save</button>\
                             <button class='options-button red-button' onclick=stationCancel()>Cancel</button>\
                         </td>\
                     </tr></table>";
         document.getElementById("newStationBtn").setAttribute("class", "options-button-active");
+        var stationTable=document.getElementById("radio-stations");
+        stationTable.scrollTo(0,stationTable.scrollHeight);
     }
-    
 }
 
 function stationCancel(){
@@ -177,7 +180,7 @@ function stationEdit(index){
     var nameCell = document.getElementById("td_stationName_"+index);
     var freqCell = document.getElementById("td_stationFreq_"+index);
     nameCell.innerHTML="<input type='text' id='editStationName_"+index+"'  style='width:150px; margin-left:0px'>"
-    freqCell.innerHTML="<input type='text' id='editStationFreq_"+index+"'  style='width:90px; margin-left:0px'>"
+    freqCell.innerHTML="<input type='text' id='editStationFreq_"+index+"'  style='width:90px; margin-left:0px' inputmode='numeric'>"
     document.getElementById('editStationName_'+index).value=GlobalStations["Stations"][index]["Name"];
     document.getElementById('editStationFreq_'+index).value=GlobalStations["Stations"][index]["Frequency"];
     //hide regular buttons
@@ -191,6 +194,10 @@ function stationEdit(index){
 
 function stationPlay(index){
     eel.py_stationPlay(index);
+}
+
+function setSSL(){
+    eel.py_setSSL(document.getElementById("ssl_option").value);
 }
 
 function stationEditCancel(index){
@@ -231,6 +238,14 @@ function stationSortByFreq(){
     sortByFreq_Reverse=~sortByFreq_Reverse;
 }
 
+function saveList(){
+    eel.py_saveList();
+}
+
+function loadList(){
+    eel.py_loadList();
+}
+
 document.getElementById("serch-mode").addEventListener("click", ()=>{
     eel.py_toggleSerchMode();
 }, false);
@@ -251,12 +266,25 @@ window.addEventListener("load", ()=>{
 
 
 eel.expose(updateRadioStatus)
-function updateRadioStatus(statusRegs){
-    // if (statusRegs[0]&0x80){
-    //     document.getElementById("Stat_0").value="1";
-    // }else{
-    //     document.getElementById("Stat_0").value="0"; 
-    // }
+function updateRadioStatus(statusRegs, controlRegs){
+    if (controlRegs[0]&0x40){
+        document.getElementById("sm-indicator").setAttribute("class", "indicator-on");
+    }else{
+        document.getElementById("sm-indicator").setAttribute("class", "indicator-off");
+    }
+
+    if (statusRegs[0]&0x80){
+        document.getElementById("rf-indicator").setAttribute("class", "indicator-on");
+    }else{
+        document.getElementById("rf-indicator").setAttribute("class", "indicator-off");
+    }
+
+    if (statusRegs[0]&0x40){
+        document.getElementById("blf-indicator").setAttribute("class", "indicator-on");
+    }else{
+        document.getElementById("blf-indicator").setAttribute("class", "indicator-off");
+    }
+
 
     // if (statusRegs[0]&0x40){
     //     document.getElementById("Stat_1").value="1";
@@ -266,7 +294,7 @@ function updateRadioStatus(statusRegs){
     // document.getElementById("Stat_2").value=(32768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/ 4_000_000 - 0.225).toFixed(1);
     // document.getElementById("Stat_4").value=(statusRegs[2]&0x7F);
 
-    document.getElementById("freq-indicator").value=(32768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/ 4_000_000 - 0.225).toFixed(1);
+    document.getElementById("freq-indicator").value=(32.768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/4_000 + 0.225).toFixed(1);//(4*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])-60)/ 488 ).toFixed(1); //- 0.225
 
 }
 

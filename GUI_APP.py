@@ -1,5 +1,6 @@
 import eel
 import SerialCOM
+import json
 
 #Global variables
 RadioStations={
@@ -12,6 +13,7 @@ RadioStations={
 }
 
 InRegisterList=[0]*5
+OutRegisterList=[0]*5
 #capture close command
 def Close_CB(page_path, sockets_list):
     print(page_path)
@@ -25,6 +27,7 @@ def py_init():
     SerialCOM.check_com_ports()
     eel.update_connection_status(SerialCOM.ser.is_open, SerialCOM.InfoString)
     eel.set_com_list(SerialCOM.com_ports, SerialCOM.ser.is_open)
+    py_loadList()
 
 @eel.expose
 def py_comListUpdate():
@@ -59,7 +62,7 @@ def py_updateStation_atIndex(stationNumber, stationName, stationFreq):
 def sortGetName(e):
     return e["Name"]
 def sortGetFreq(e):
-    return e["Frequency"]
+    return float(e["Frequency"])
 
 @eel.expose
 def py_stationListSort(criteria, direction):
@@ -80,6 +83,21 @@ def py_stationListSort(criteria, direction):
             pass
     else:
         pass
+    eel.stationsUpdate(RadioStations)
+
+@eel.expose
+def py_saveList():
+    json_obj=json.dumps(RadioStations)
+    with open("Stations.json", "w") as outFile:
+        outFile.write(json_obj)
+    eel.stationsUpdate(RadioStations)
+
+@eel.expose
+def py_loadList():
+    with open("Stations.json", "r") as inFile:
+        global RadioStations
+        json_obj=json.load(inFile)
+        RadioStations=json_obj
     eel.stationsUpdate(RadioStations)
 
 @eel.expose
@@ -105,12 +123,19 @@ def py_getRadioStatus():
                 InRegisterList[2]=data[2]
                 InRegisterList[3]=data[3]
                 InRegisterList[4]=data[4]
+
+                OutRegisterList[0]=data[5]
+                OutRegisterList[1]=data[6]
+                OutRegisterList[2]=data[7]
+                OutRegisterList[3]=data[8]
+                OutRegisterList[4]=data[9]
+
             except Exception as e:
                 print(e)
                 print("Get Inst Values - Error while converting received data")
                 eel.printAlert("Error while converting received data")
         SerialCOM.ReleaseToken()
-  eel.updateRadioStatus(InRegisterList)
+  eel.updateRadioStatus(InRegisterList, OutRegisterList)
 
 @eel.expose
 def py_toggleSerchMode():
@@ -143,7 +168,7 @@ def py_radioOff():
 def py_stationPlay(index):
     print(f'Plaing Station {index} - {RadioStations["Stations"][index]["Name"]} - {RadioStations["Stations"][index]["Frequency"]}')
     #write PLL parameter
-    PLL=int(4*(float(RadioStations["Stations"][index]["Frequency"])*1_000_000+225_000)/32768)
+    PLL=int(4*(float(RadioStations["Stations"][index]["Frequency"])*1_000_000-225_000)/32768)
     print(f'PLL should be {PLL}')
 
     if (SerialCOM.ser.is_open):
@@ -165,6 +190,32 @@ def py_stationPlay(index):
                 print("Write data error")
                 eel.printAlert("Error while converting received data")
         SerialCOM.setCommandReg(13, 1)
+        SerialCOM.ReleaseToken()
+    else:
+        eel.printAlert("Serial connection not opened")
+
+@eel.expose
+def py_setSSL(value):
+    print(f'Setting SSL to {value}')
+    
+    if (SerialCOM.ser.is_open):
+      if SerialCOM.GetToken():
+        CMD_String=f'w0,1,{int(value)&0x03}\r'
+
+        if SerialCOM.sendString(CMD_String)==-1:return -1
+        [res, received_string]=SerialCOM.receiveString()
+        if (res==-1): return -1 
+        if received_string[0]=='X':
+          print("Data update sequence - Command Error")
+        else:
+            received_string=received_string[1:] #take out first character
+            #convert the content to a byte list
+            try:
+                pass
+            except Exception as e:
+                print(e)
+                print("Write data error")
+                eel.printAlert("Error while converting received data")
         SerialCOM.ReleaseToken()
     else:
         eel.printAlert("Serial connection not opened")

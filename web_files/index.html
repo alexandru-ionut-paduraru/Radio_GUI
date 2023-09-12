@@ -27,7 +27,7 @@
                             font-weight: bold;
                             color: rgb(172, 150, 124);" id="">
                         No channel playing
-                </span>
+                    </span>
                 </div>
             </div>
             <div class="menu">
@@ -72,27 +72,58 @@
                 </table>
                 <span id="NewStationForm"></span>
                 
-                <button class="options-button" onclick=stationSortByName()>Sort by name</button>
-                <button class="options-button" onclick=stationSortByFreq()>Sort by frequency</button>
-                <button class="options-button" onclick=addStation() id='newStationBtn'> + Add new station</button>
-                <button class="options-button" onclick=eel.getRadioStations()>Band Scan</button>
+                <button class="options-button" onclick=stationSortByName() style="width:130px">Sort by name</button>
+                <button class="options-button" onclick=stationSortByFreq() style="width:130px">Sort by frequency</button>
+                <button class="options-button" onclick=addStation() id='newStationBtn' style="width:130px"> + Add new station</button>
+                <br>
+                <button class="options-button" onclick=saveList() style="width:130px">Save List</button>
+                <button class="options-button" onclick=loadList() style="width:130px">Load List</button>
             </div>
 
             <div class="content"  id="Radio-Control">
                 <div>
-                    <h3 style="margin-left:5px; margin-top: 5px;">Controls </h3> 
                    <!--  <label  for="com_ports" style="margin-left: 5px;"><strong>Available Ports</strong> </label>
                     <select name="com_ports" id="com_ports">
                         <option value="-select-">-Select-</option>
                     </select> -->
-                    
-                    <button class="options-button" style="width: 245px;" id="serch-mode">Search Mode</button>
-                    <br>
-                    <button class="options-button" style="font-size: 20pt; width: 50px; height: 50px;" id="plus-button">+</button>
-                    <input type="text" inputmode="numeric" style="font-size: 20pt; width: 120px; height: 50px; text-align: center; padding: 0px;" value=100.6 id="freq-indicator">
-                    <button class="options-button" style="font-size: 20pt; width: 50px; height: 50px;" id="minus-button">-</button>
-                    <br>
-                    <button class="options-button" style="width: 245px;" id="serch-save-new">Save Station</button>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 100px; border-right: 1px lightblue solid; vertical-align: top; border-bottom: 1px lightblue solid;">
+                                <h3 style="margin-left:5px; margin-top: 5px; color: rgb(1, 108, 170);">Indicators </h3> 
+                            </td>
+                            <td  style="border-bottom: 1px lightblue solid;">
+                                <span class="indicator-on" id="sm-indicator">
+                                    Search Mode (SM)
+                                </span>
+                                <span class="indicator-off" id="rf-indicator">
+                                    Ready (RF)
+                                </span>
+                                <span class="indicator-off" id="blf-indicator">
+                                    Band Limit (BLF)
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-right: 1px lightblue solid;">
+                                <h3 style="margin-left:5px; margin-top: 5px; color: rgb(1, 108, 170);">Controls </h3> 
+                            </td>
+                            <td>
+                                <button class="options-button" style="width: 245px;" id="serch-mode">Search Mode</button>
+                                <select name="ssl_option" id="ssl_option" onchange=setSSL()>
+                                    <option value="0">SSL - 0</option>
+                                    <option value="1" selected>SSL - 5</option>
+                                    <option value="2">SSL - 7</option>
+                                    <option value="3">SSL - 10</option>
+                                </select>
+                                <br>
+                                <button class="options-button" style="font-size: 20pt; width: 50px; height: 50px;" id="plus-button">+</button>
+                                <input disabled type="text" inputmode="numeric" style="font-size: 20pt; width: 120px; height: 50px; text-align: center; padding: 0px;" value=100.6 id="freq-indicator">
+                                <button class="options-button" style="font-size: 20pt; width: 50px; height: 50px;" id="minus-button">-</button>
+                                <br>
+                                <button class="options-button" style="width: 245px;" id="serch-save-new">Save Station</button>                                
+                            </td>
+                        </tr>
+                    </table>
                     
                     <!-- <br>
                     <hr>
@@ -118,7 +149,7 @@
             </div>
         </div>
         <div class="footer">
-            Radio GUI application - 2023
+            Radio GUI Application - 2023
         </div>
         <!-- <script type="text/javascript">
   vscode-file://vscode-app/c:/Program%20Files/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html          alert("Message");
