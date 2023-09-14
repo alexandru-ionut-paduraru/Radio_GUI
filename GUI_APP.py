@@ -1,6 +1,7 @@
 import eel
 import SerialCOM
 import json
+import os
 
 #Global variables
 RadioStations={
@@ -18,7 +19,7 @@ OutRegisterList=[0]*5
 def Close_CB(page_path, sockets_list):
     print(page_path)
     print(f'Other Websockets: {sockets_list}')
-    #exit() #exit program execution
+    os.abort() #exit program execution
 
 eel.init('web_files', allowed_extensions=['.js', '.html'])
 

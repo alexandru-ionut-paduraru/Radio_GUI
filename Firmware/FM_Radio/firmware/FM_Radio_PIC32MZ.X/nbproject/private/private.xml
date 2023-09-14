@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/TEA5767.h</file>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/TEA5767.c</file>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/config/default/peripheral/tmr/plib_tmr4.c</file>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/app.h</file>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/GUI.c</file>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/config/default/peripheral/i2c/master/plib_i2c1_master.h</file>
-            <file>file:/C:/Users/M68336/HarmonyProjects/FM_Radio/firmware/src/app.c</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
