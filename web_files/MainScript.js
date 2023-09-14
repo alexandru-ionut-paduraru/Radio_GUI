@@ -285,16 +285,7 @@ function updateRadioStatus(statusRegs, controlRegs){
         document.getElementById("blf-indicator").setAttribute("class", "indicator-off");
     }
 
-
-    // if (statusRegs[0]&0x40){
-    //     document.getElementById("Stat_1").value="1";
-    // }else{
-    //     document.getElementById("Stat_1").value="0"; 
-    // }
-    // document.getElementById("Stat_2").value=(32768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/ 4_000_000 - 0.225).toFixed(1);
-    // document.getElementById("Stat_4").value=(statusRegs[2]&0x7F);
-
-    document.getElementById("freq-indicator").value=(32.768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/4_000 + 0.225).toFixed(1);//(4*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])-60)/ 488 ).toFixed(1); //- 0.225
+    document.getElementById("freq-indicator").value=(32.768*(((statusRegs[0]&0x3F)<<8)+statusRegs[1])/4_000 + 0.225).toFixed(1);
 
 }
 
